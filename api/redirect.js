@@ -1,5 +1,5 @@
 export default function handler(req, res) {
-  const phone = process.env.MY_PHONE_NUMBER; // Numarayı koddan tamamen siliyoruz
+  const phone = process.env.MY_PHONE_NUMBER; 
   const message = encodeURIComponent("Selam! Web siteni gördüm, kahve teklifini kabul ediyorum. 😊");
 
   if (!phone) {
