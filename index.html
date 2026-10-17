@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sana özel bir mesaj.">
+  <title>Sana Bir Mesajım Var ✨</title>
+  
+  <style>
+    :root {
+      --bg-color: #fce4ec;
+      --card-bg: #ffffff;
+      --text-main: #333333;
+      --text-muted: #666666;
+      --primary-color: #e91e63;
+      --primary-hover: #c2185b;
+      --btn-no-bg: #eeeeee;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 35px 25px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card__icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    .card__title {
+      font-size: 22px;
+      color: var(--primary-color);
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .card__description {
+      font-size: 15px;
+      color: var(--text-main);
+      line-height: 1.5;
+      margin-bottom: 30px;
+    }
+
+    .action-area {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+      min-height: 100px;
+      position: relative;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 50px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+      text-decoration: none;
+      display: inline-block;
+      outline: none;
+    }
+
+    .btn--yes {
+      background-color: var(--primary-color);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(233, 30, 99, 0.25);
+      z-index: 2;
+    }
+
+    .btn--yes:active {
+      transform: scale(0.96);
+    }
+
+    .btn--no {
+      background-color: var(--btn-no-bg);
+      color: var(--text-muted);
+      position: relative;
+      transition: top 0.25s ease, left 0.25s ease;
+      z-index: 3;
+    }
+
+    .card__note {
+      font-size: 12px;
+      color: #999999;
+      margin-top: 25px;
+      border-top: 1px solid #f0f0f0;
+      padding-top: 15px;
+      line-height: 1.4;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      z-index: 100;
+    }
+
+    .modal__content {
+      background: #ffffff;
+      padding: 30px 20px;
+      border-radius: var(--radius);
+      max-width: 320px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .modal__title {
+      color: var(--primary-color);
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .modal__text {
+      font-size: 14px;
+      color: var(--text-main);
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    .modal__actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="card">
+    <div class="card__icon" aria-hidden="true">🌸</div>
+    <h1 class="card__title">Sana Bir Mesajım Var</h1>
+    <p class="card__description">
+      Bunu sana yüz yüze söylemeye biraz çekindim, o yüzden burayı hazırladım. Bir ara kahve içip sohbet etmeye ne dersin? ✨
+    </p>
+
+    <div class="action-area" id="actionArea">
+      <button class="btn btn--yes" id="yesBtn">Evet, Olur! ☕</button>
+      <button class="btn btn--no" id="noBtn">Hayır</button>
+    </div>
+
+    <footer class="card__note">
+      Eğer hayatında biri varsa veya ilgilenmiyorsan tamamen anlayışla karşılarım. Teşekkürler! 😊
+    </footer>
+  </main>
+
+  <div class="modal" id="decisionModal" role="dialog" aria-modal="true">
+    <div class="modal__content">
+      <h3 class="modal__title">Emin misin? 🤔</h3>
+      <p class="modal__text">Bak baştan söyleyeyim, tatlı ve kahve ıslarlama garantili bir teklifti! Tekrar düşünmek ister misin?</p>
+      <div class="modal__actions">
+        <button class="btn btn--yes" id="modalYesBtn">Tamam, Bir Şans Veriyorum ✨</button>
+        <button class="btn btn--no" id="modalNoBtn" style="position: static; width: 100%;">Yine de Teşekkürler</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      /* --- 1. SESSİZ & GİZLİ BİLDİRİM TETİKLEME --- */
+      try {
+        const STORAGE_KEY = 'v_flag';
+        if (!localStorage.getItem(STORAGE_KEY)) {
+          localStorage.setItem(STORAGE_KEY, '1');
+          // Backend API'ye tamamen şifresiz/bilgisiz istek atılır
+          fetch('/api/notify', { method: 'POST' }).catch(() => {});
+        }
+      } catch (err) {}
+
+      /* --- 2. DİNAMİK BUTON MEKANİZMASI --- */
+      const noBtn = document.getElementById('noBtn');
+      const modal = document.getElementById('decisionModal');
+      const yesBtn = document.getElementById('yesBtn');
+      const modalYesBtn = document.getElementById('modalYesBtn');
+      const modalNoBtn = document.getElementById('modalNoBtn');
+
+      const messages = [
+        "Yakalayamazsın! 😜",
+        "Emin misin?",
+        "Son kararın mı?",
+        "Bir daha düşün bence..."
+      ];
+      
+      let step = 0;
+
+      function handleNo(e) {
+        e.preventDefault();
+        if (step < messages.length) {
+          const rx = (Math.random() - 0.5) * 140; 
+          const ry = (Math.random() - 0.5) * 60;
+
+          noBtn.style.position = 'absolute';
+          noBtn.style.left = `calc(50% + ${rx}px)`;
+          noBtn.style.top = `calc(50% + ${ry}px)`;
+          
+          noBtn.textContent = messages[step];
+          step++;
+        } else {
+          modal.style.display = 'flex';
+        }
+      }
+
+      noBtn.addEventListener('click', handleNo);
+      noBtn.addEventListener('touchstart', handleNo);
+
+      /* --- 3. GİZLİ YÖNLENDİRME (SERVERLESS HANDLER) --- */
+      function proceed() {
+        // İnceleyen kişi burada sadece /api/redirect görür, telefon numarası ASLA görünmez!
+        window.location.href = '/api/redirect';
+      }
+
+      yesBtn.addEventListener('click', proceed);
+      modalYesBtn.addEventListener('click', proceed);
+
+      modalNoBtn.addEventListener('click', () => {
+        alert("Anlayışın ve zaman ayırdığın için teşekkür ederim. Kendine çok iyi bak! ✨");
+        modal.style.display = 'none';
+      });
+
+    });
+  </script>
+</body>
+</html>
